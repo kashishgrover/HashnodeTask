@@ -8,4 +8,6 @@ While writing the comment, everytime the user pauses you need to sync the conten
 #### Note:  
 You need to use Node.js as the backend. For storing the comment draft please use MongoDB. 
 On the frontend you can use plain JavaScript or any library/framework of your choice.
-Each time you sync the comment with server, make sure you submit just the delta/diff and not the whole comment (take a look at this node module).
+Each time you sync the comment with server, make sure you submit just the delta/diff and not the whole comment (take a look at [this][this] node module).
+
+[this]: https://github.com/marcelklehr/diff_match_patch
