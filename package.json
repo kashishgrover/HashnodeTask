@@ -1,0 +1,10 @@
+{
+  "name"         : "hashnode-task",
+  "version"      : "0.0.0",
+  "description"  : "Task give to me by Hashnode for a potential job opportunity.",
+  "main"         : "app.js",
+  "author"       : "Kashish",
+  "dependencies" : {
+    "express"         : "~4.6.1"
+  }
+}
