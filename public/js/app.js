@@ -1,1 +1,9 @@
-angular.module('sampleApp', ['ngRoute', 'appRoutes', 'MainCtrl', 'NerdCtrl', 'NerdService']);
+angular.module('HashnodeTask', [
+  'ngRoute',
+  'appRoutes',
+  'MainCtrl',
+  'NerdCtrl',
+  'LoginCtrl',
+  'RegCtrl',
+  'NerdService'
+]);
