@@ -1,0 +1,12 @@
+{
+    "name": "hashnode-task",
+    "version": "0.0.0",
+    "dependencies": {
+        "bootstrap": "latest",
+        "font-awesome": "latest",
+        "animate.css": "latest",
+        "angular": "~1.5.0",
+        "angular-route": "~1.5.0",
+        "ngDraggable": "~0.1.11"
+    }
+}

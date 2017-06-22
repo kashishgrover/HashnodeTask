@@ -20,6 +20,7 @@ module.exports = function(app) {
         res.send(err);
 
       res.json(nerds); // return all nerds in JSON format
+      console.log(nerds);
     });
   });
 
