@@ -1,17 +1,12 @@
-angular.module('NerdCtrl', []).controller('NerdController', function($scope, $http, _) {
+angular.module('NerdCtrl', []).controller('NerdController', function($scope, $http) {
 
-  $scope.tagline = 'This comment will be synced.';
-  $scope.count = 0;
   var id = "";
 
   var PostFlag = true;
   $scope.LoggedIn = false;
   $scope.NewUser = false;
 
-  var numbers = [10, 5, 100, 2, 1000];
-  console.log(_.min(numbers));
-
-  var SyncThreshold = 10;
+  $scope.syncing = "Not Syncing..."
 
   $scope.Login = function() {
     var data = {
@@ -39,23 +34,25 @@ angular.module('NerdCtrl', []).controller('NerdController', function($scope, $ht
   };
 
   $scope.inputChanged = function() {
-    $scope.count++;
-    if ($scope.count % SyncThreshold === 0) {
-
-      var data = {
-        email: $scope.email,
-        comment: $scope.comment
-      };
-      if (PostFlag === true) {
-        $http.post('/api/comment', data).success(function(data, status) {
-          console.log('Data posted successfully');
-          console.log("Comment Synced.");
-          PostFlag = false;
-        });
-      } else {
-        console.log("Data will have to be PUT");
-        $http.put('/api/comment/' + id, data);
-      }
+    $scope.syncing = "Syncing...";
+    var data = {
+      email: $scope.email,
+      comment: $scope.comment
+    };
+    if (PostFlag === true) {
+      $http.post('/api/comment', data).success(function(data, status) {
+        console.log('Data posted successfully');
+        console.log("Comment Synced.");
+        PostFlag = false;
+        $scope.syncing = "Not Syncing...";
+      });
+    } else {
+      console.log("Data will have to be PUT");
+      $http.put('/api/comment/' + id, data).success(function(data, status) {
+        console.log('Data put successfully');
+        console.log("Comment Synced.");
+        $scope.syncing = "Not Syncing...";
+      });
     }
   };
 

@@ -1,16 +1,14 @@
 <div class="text-center">
-  <h1>Enter Comment</h1>
+  <h2>Hashnode Task</h2>
+  <h4>Comment Sync</h4>
+  <br /><br />
   <input type="text" ng-model="email" placeholder="Email" />
   <button ng-click="Login()" ng-show="LoggedIn == false">Login/Register</button>
   <button ng-click="Logout()" ng-show="LoggedIn == true || newUser == true">Logout</button>
   <br /><br />
-  <textarea id="commentBox" ng-model="comment" ng-change="inputChanged()" ng-show="email || LoggedIn == true " cols="40" rows="10" placeholder="Comment"></textarea>
-  <p>
-    {{comment}}
-  </p>
+  <textarea ng-model="comment" ng-change="inputChanged()" ng-model-options="{debounce: 1000}" ng-show="email || LoggedIn == true " cols="40" rows="10" placeholder="Comment">
+  </textarea>
   <p>
     {{syncing}}
   </p>
-  <br /><br />
-  <p>{{ tagline }}</p>
 </div>
