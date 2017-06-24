@@ -1,15 +1,15 @@
 <div class="text-center">
   <h1>Enter Comment</h1>
   <input type="text" ng-model="email" placeholder="Email" />
-  <button ng-click="Login()">Login/Register</button>
-  <button ng-click="Logout()" ng-show="LoggedIn == true">Logout</button>
+  <button ng-click="Login()" ng-show="LoggedIn == false">Login/Register</button>
+  <button ng-click="Logout()" ng-show="LoggedIn == true || newUser == true">Logout</button>
   <br /><br />
-  <textarea id="commentBox" ng-model="comment" ng-change="inputChanged()" ng-show="LoggedIn == true || newUser == true" cols="40" rows="10" placeholder="Comment"></textarea>
+  <textarea id="commentBox" ng-model="comment" ng-change="inputChanged()" ng-show="email || LoggedIn == true " cols="40" rows="10" placeholder="Comment"></textarea>
   <p>
     {{comment}}
   </p>
   <p>
-    The input changed {{count}} times.
+    {{syncing}}
   </p>
   <br /><br />
   <p>{{ tagline }}</p>

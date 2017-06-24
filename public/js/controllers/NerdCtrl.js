@@ -1,4 +1,4 @@
-angular.module('NerdCtrl', []).controller('NerdController', function($scope, $http) {
+angular.module('NerdCtrl', []).controller('NerdController', function($scope, $http, _) {
 
   $scope.tagline = 'This comment will be synced.';
   $scope.count = 0;
@@ -6,12 +6,14 @@ angular.module('NerdCtrl', []).controller('NerdController', function($scope, $ht
 
   var PostFlag = true;
   $scope.LoggedIn = false;
+  $scope.NewUser = false;
+
+  var numbers = [10, 5, 100, 2, 1000];
+  console.log(_.min(numbers));
 
   var SyncThreshold = 10;
 
   $scope.Login = function() {
-    console.log($scope.email);
-
     var data = {
       email: $scope.email
     };
@@ -22,9 +24,11 @@ angular.module('NerdCtrl', []).controller('NerdController', function($scope, $ht
         'Accept': 'application/json'
       }
     }).then(function(response) {
+      console.log(response);
       console.log("I got the data I had requested.");
       PostFlag = false;
       $scope.LoggedIn = true;
+      $scope.NewUser = false;
       $scope.comment = response.data.comment;
       id = response.data._id;
     });
