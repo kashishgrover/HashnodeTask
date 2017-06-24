@@ -2,6 +2,9 @@ angular.module('NerdCtrl', []).controller('NerdController', function($scope, $ht
 
   $scope.tagline = 'This comment will be synced.';
   $scope.count = 0;
+  var id = "";
+
+  var PostFlag = true;
 
   var SyncThreshold = 10;
 
@@ -19,9 +22,10 @@ angular.module('NerdCtrl', []).controller('NerdController', function($scope, $ht
       }
     }).then(function(response) {
       console.log("I got the data I had requested.");
+      PostFlag = false;
       $scope.comment = response.data.comment;
+      id = response.data._id;
     });
-
   };
 
   $scope.inputChanged = function() {
@@ -32,12 +36,16 @@ angular.module('NerdCtrl', []).controller('NerdController', function($scope, $ht
         email: $scope.email,
         comment: $scope.comment
       };
-
-      $http.post('/api/comment', data).success(function(data, status) {
-        console.log('Data posted successfully');
-      });
-
-      console.log("Comment Will Be Synced.")
+      if (PostFlag === true) {
+        $http.post('/api/comment', data).success(function(data, status) {
+          console.log('Data posted successfully');
+          console.log("Comment Synced.");
+          PostFlag = false;
+        });
+      } else {
+        console.log("Data will have to be PUT");
+        $http.put('/api/comment/' + id, data);
+      }
     }
   };
 
