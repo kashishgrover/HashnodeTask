@@ -1,31 +1,36 @@
 // app/routes.js
 
 // grab the nerd model we just created
-var Nerd = require('./models/nerd');
+var comment = require('./models/comment');
+
+var mongoose = require('mongoose');
+
+// connect to our mongoDB database
+var url = 'mongodb://hashnodetask:hashnode@ds133932.mlab.com:33932/meinl';
+var MongoClient = mongoose.mongo.MongoClient;
+MongoClient.connect(url, function(err, db) {
+  if (err) {
+    console.log(err);
+  } else {
+    console.log("Connected to " + db.s.databaseName + ".");
+  }
+});
 
 module.exports = function(app) {
 
   // server routes ===========================================================
-  // handle things like api calls
-  // authentication routes
 
-  // sample api route
-  app.get('/api/nerds', function(req, res) {
-    // use mongoose to get all nerds in the database
-    Nerd.find(function(err, nerds) {
-
-      // if there is an error retrieving, send the error.
-      // nothing after res.send(err) will execute
-      if (err)
-        res.send(err);
-
-      res.json(nerds); // return all nerds in JSON format
-      console.log(nerds);
+  app.get('/api/comment', function(req, res) {
+    console.log("I received a GET Request. Sending Data.")
+    res.json({
+      comment: 'test'
     });
   });
 
-  // route to handle creating goes here (app.post)
-  // route to handle delete goes here (app.delete)
+  app.post('/api/comment', function(req, res) {
+    console.log("I received a POST Request. Pushing Data.")
+    console.log(req);
+  });
 
   // frontend routes =========================================================
   // route to handle all angular requests
