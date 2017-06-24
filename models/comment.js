@@ -1,8 +1,6 @@
 var mongoose = require('mongoose');
 
-// define our nerd model
-// module.exports allows us to pass this to other files when it is called
-module.exports = mongoose.model('comment', {
+var commentSchema = mongoose.Schema({
   email: {
     type: String,
     required: true,
@@ -15,3 +13,5 @@ module.exports = mongoose.model('comment', {
     type: String
   }
 });
+
+module.exports = mongoose.model('comment', commentSchema);

@@ -1,6 +1,6 @@
 // app/routes.js
 
-// grab the nerd model we just created
+// grab the comment model from comment.js
 var comment = require('./models/comment');
 
 var mongoose = require('mongoose');
