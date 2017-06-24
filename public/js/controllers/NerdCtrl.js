@@ -5,6 +5,7 @@ angular.module('NerdCtrl', []).controller('NerdController', function($scope, $ht
   var id = "";
 
   var PostFlag = true;
+  $scope.LoggedIn = false;
 
   var SyncThreshold = 10;
 
@@ -23,9 +24,14 @@ angular.module('NerdCtrl', []).controller('NerdController', function($scope, $ht
     }).then(function(response) {
       console.log("I got the data I had requested.");
       PostFlag = false;
+      $scope.LoggedIn = true;
       $scope.comment = response.data.comment;
       id = response.data._id;
     });
+  };
+
+  $scope.Logout = function() {
+    location.reload();
   };
 
   $scope.inputChanged = function() {
