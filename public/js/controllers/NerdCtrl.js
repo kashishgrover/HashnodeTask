@@ -35,25 +35,28 @@ angular.module('NerdCtrl', []).controller('NerdController', function($scope, $ht
 
   $scope.inputChanged = function() {
     $scope.syncing = "Syncing...";
+
     var data = {
       email: $scope.email,
       comment: $scope.comment
     };
+
     if (PostFlag === true) {
       $http.post('/api/comment', data).success(function(data, status) {
-        console.log('Data posted successfully');
-        console.log("Comment Synced.");
+        console.log("POST successful. Comment Synced.");
         PostFlag = false;
+
         $scope.syncing = "Not Syncing...";
       });
     } else {
       console.log("Data will have to be PUT");
       $http.put('/api/comment/' + id, data).success(function(data, status) {
-        console.log('Data put successfully');
-        console.log("Comment Synced.");
+        console.log("PUT successful. Comment Synced.");
+
         $scope.syncing = "Not Syncing...";
       });
     }
+
   };
 
 });

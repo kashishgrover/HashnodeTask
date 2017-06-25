@@ -3,8 +3,8 @@
   <h4>Comment Sync</h4>
   <br /><br />
   <input type="text" ng-model="email" placeholder="Email" />
-  <button ng-click="Login()" ng-show="LoggedIn == false">Login/Register</button>
-  <button ng-click="Logout()" ng-show="LoggedIn == true || newUser == true">Logout</button>
+  <button class="btn btn-sm" ng-click="Login()" ng-show="LoggedIn == false">Login/Register</button>
+  <button class="btn btn-sm" ng-click="Logout()" ng-show="LoggedIn == true || newUser == true">Logout</button>
   <br /><br />
   <textarea ng-model="comment" ng-change="inputChanged()" ng-model-options="{debounce: 1000}" ng-show="email || LoggedIn == true " cols="40" rows="10" placeholder="Comment">
   </textarea>
