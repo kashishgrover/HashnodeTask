@@ -1,8 +1,15 @@
 var mongoose = require('mongoose');
 
+var dmpmod = require('diff_match_patch');
+var dmp = new dmpmod.diff_match_patch();
+
 var url = 'mongodb://hashnodetask:hashnode@ds133932.mlab.com:33932/meinl';
 var MongoClient = mongoose.mongo.MongoClient;
 var conn, collection;
+
+var oldComment = "";
+var newComment = "";
+var diff_main = [];
 
 MongoClient.connect(url, function(err, db) {
   if (err) {
@@ -29,6 +36,24 @@ module.exports = function(app) {
           console.log(err);
         } else if (res) {
           data = res;
+          // console.log(data);
+
+          // console.log(typeof(data.diff));
+          // console.log(data.diff);
+          oldComment = res.comment;
+
+          if (data.diff !== null) {
+            console.log("41");
+            console.log("Old Comment: " + oldComment);
+            var patches = dmp.patch_make(data.diff);
+            var patched_text = dmp.patch_apply(patches, oldComment);
+            console.log(patched_text)
+            data.comment = patched_text[0];
+          }
+
+          // console.log(data);
+
+
           response.json(data);
         } else {
           console.log("No Matches Found.");
@@ -39,29 +64,34 @@ module.exports = function(app) {
 
   app.post('/api/comment', function(req, res) {
     console.log("Routes received a POST Request. Pushing Data.");
-    console.log(req.body);
+    req.body.diff = null;
     collection.insert(req.body, function(err, doc) {
       if (err) {
         console.log(err);
       }
+      console.log(doc.ops);
       res.json(doc);
     });
   });
 
   app.put('/api/comment/:id', function(req, res) {
-    console.log(req.params.id);
+
     var query = {
       'email': req.body.email
     };
 
-    console.log(query);
+    newComment = req.body.comment;
+    diff_main = dmp.diff_main(oldComment, newComment);
 
     var newData = {
       'email': req.body.email,
-      'comment': req.body.comment
+      'comment': oldComment,
+      'diff': diff_main
     }
 
-    console.log(newData);
+    // console.log("\n\nNew Comment: " + newComment);
+    // console.log("Old Comment: " + oldComment);
+    // console.log("DIFF: " + diff_main)
 
     collection.findOneAndUpdate(query, newData, {
       upsert: true
@@ -69,7 +99,10 @@ module.exports = function(app) {
       if (err) {
         console.log("Error Updating")
       }
-      return res.send("succesfully saved");
+
+      oldComment = newComment;
+
+      return res.send("Succesfully saved");
     });
   });
 
