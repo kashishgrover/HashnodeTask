@@ -15,7 +15,7 @@ MongoClient.connect(url, function(err, db) {
   if (err) {
     console.log(err);
   } else {
-    console.log("Connected to " + db.s.databaseName + ".");
+    console.log("Connected to database " + db.s.databaseName + ".");
     conn = db;
     collection = conn.collection('comment');
   }
@@ -36,23 +36,14 @@ module.exports = function(app) {
           console.log(err);
         } else if (res) {
           data = res;
-          // console.log(data);
 
-          // console.log(typeof(data.diff));
-          // console.log(data.diff);
           oldComment = res.comment;
 
           if (data.diff !== null) {
-            console.log("41");
-            console.log("Old Comment: " + oldComment);
             var patches = dmp.patch_make(data.diff);
             var patched_text = dmp.patch_apply(patches, oldComment);
-            console.log(patched_text)
             data.comment = patched_text[0];
           }
-
-          // console.log(data);
-
 
           response.json(data);
         } else {
@@ -69,7 +60,6 @@ module.exports = function(app) {
       if (err) {
         console.log(err);
       }
-      console.log(doc.ops);
       res.json(doc);
     });
   });
@@ -88,10 +78,6 @@ module.exports = function(app) {
       'comment': oldComment,
       'diff': diff_main
     }
-
-    // console.log("\n\nNew Comment: " + newComment);
-    // console.log("Old Comment: " + oldComment);
-    // console.log("DIFF: " + diff_main)
 
     collection.findOneAndUpdate(query, newData, {
       upsert: true

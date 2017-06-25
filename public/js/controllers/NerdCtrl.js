@@ -6,12 +6,14 @@ angular.module('NerdCtrl', []).controller('NerdController', function($scope, $ht
   $scope.LoggedIn = false;
   $scope.NewUser = false;
 
-  $scope.syncing = "Not Syncing..."
+  $scope.syncingText = "Not Syncing..."
 
   $scope.Login = function() {
     var data = {
       email: $scope.email
     };
+
+    $scope.syncingText = "Syncing..."
 
     $http.get('/api/comment', {
       params: data,
@@ -19,11 +21,11 @@ angular.module('NerdCtrl', []).controller('NerdController', function($scope, $ht
         'Accept': 'application/json'
       }
     }).then(function(response) {
-      console.log(response);
-      console.log("I got the data I had requested.");
+      console.log("GET successful.");
       PostFlag = false;
       $scope.LoggedIn = true;
       $scope.NewUser = false;
+      $scope.syncingText = "Not Syncing..."
       $scope.comment = response.data.comment;
       id = response.data._id;
     });
@@ -34,7 +36,7 @@ angular.module('NerdCtrl', []).controller('NerdController', function($scope, $ht
   };
 
   $scope.inputChanged = function() {
-    $scope.syncing = "Syncing...";
+    $scope.syncingText = "Syncing...";
 
     var data = {
       email: $scope.email,
@@ -46,14 +48,14 @@ angular.module('NerdCtrl', []).controller('NerdController', function($scope, $ht
         console.log("POST successful. Comment Synced.");
         PostFlag = false;
 
-        $scope.syncing = "Not Syncing...";
+        $scope.syncingText = "Not Syncing...";
       });
     } else {
       console.log("Data will have to be PUT");
       $http.put('/api/comment/' + id, data).success(function(data, status) {
         console.log("PUT successful. Comment Synced.");
 
-        $scope.syncing = "Not Syncing...";
+        $scope.syncingText = "Not Syncing...";
       });
     }
 
