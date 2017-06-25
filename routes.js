@@ -1,15 +1,8 @@
-// app/routes.js
-
-// grab the comment model from comment.js
-// var comment = require('./models/comment');
-
 var mongoose = require('mongoose');
 
-// connect to our mongoDB database
 var url = 'mongodb://hashnodetask:hashnode@ds133932.mlab.com:33932/meinl';
 var MongoClient = mongoose.mongo.MongoClient;
 var conn, collection;
-
 
 MongoClient.connect(url, function(err, db) {
   if (err) {
@@ -78,31 +71,6 @@ module.exports = function(app) {
       }
       return res.send("succesfully saved");
     });
-
-
-    // MyModel.findOneAndUpdate(query, req.newData, {
-    //   upsert: true
-    // }, function(err, doc) {
-    //   if (err) return res.send(500, {
-    //     error: err
-    //   });
-    //   return res.send("succesfully saved");
-    // });
-    // collection.findOneAndUpdate({
-    //   query: {
-    //     _id: req.params.id
-    //   },
-    //   update: {
-    //     $set: {
-    //       email: req.body.email,
-    //       comment: req.body.comment
-    //     }
-    //   },
-    //   new: true
-    // }, function(err, doc) {
-    //   res.json(doc);
-    //   console.log('Updated');
-    // });
   });
 
   // frontend routes =========================================================
