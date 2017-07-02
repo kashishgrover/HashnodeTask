@@ -60,6 +60,8 @@ module.exports = function(app) {
 
   app.put('/api/comment/:id', function(req, res) {
 
+    console.log("PUT req: ", req.body);
+
     var query = {
       'email': req.body.email,
     };
@@ -87,9 +89,7 @@ module.exports = function(app) {
       if (err) {
         console.log("Error Updating")
       }
-      console.log("Doc:", doc);
-
-      return res.send("Succesfully saved");
+      return res.send("Succesfully saved.");
     });
   });
 

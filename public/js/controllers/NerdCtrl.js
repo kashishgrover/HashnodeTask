@@ -78,7 +78,7 @@ angular.module('NerdCtrl', []).controller('NerdController', function($scope, $ht
         comment: $scope.comment
       };
 
-      console.log("Data will be POSTed.");
+      console.log("Data will be POSTed - ", data);
       $http.post('/api/comment/', data).success(function(data, status) {
 
         console.log("POST successful. Comment Synced. User Registered.");
@@ -98,7 +98,7 @@ angular.module('NerdCtrl', []).controller('NerdController', function($scope, $ht
         diff: diff_main
       };
 
-      console.log("Data will have to be PUT");
+      console.log("Data will have to be PUT - ", data);
       $http.put('/api/comment/' + id, data).success(function(status) {
 
         oldComment = newComment;
@@ -108,7 +108,5 @@ angular.module('NerdCtrl', []).controller('NerdController', function($scope, $ht
 
       });
     }
-
   };
-
 });
