@@ -43,7 +43,7 @@ angular.module('NerdCtrl', []).controller('NerdController', function($scope, $ht
       } else {
         console.log("GET successful, but no data found.");
 
-        $scope.syncingText = "This user does not exist.";
+        $scope.syncingText = "<<This user does not exist>>";
 
         PostFlag = true;
         $scope.NewUser = true;
