@@ -13,13 +13,11 @@ MongoClient.connect(url, function(err, db) {
   if (err) {
     console.log(err);
   } else {
-    console.log("Connected to database " + db.s.databaseName + ".");
+    console.log("Connected to database " + db.s.databaseName + ".\n");
     conn = db;
     collection = conn.collection('comment');
   }
 });
-
-console.log(dmp.diff_main('a', 'b'));
 
 module.exports = function(app) {
 
@@ -27,7 +25,6 @@ module.exports = function(app) {
 
   app.get('/api/comment', function(req, response) {
 
-    console.log("Routes received a GET Request. Sending Data.");
     if (req.query.email) {
       collection.findOne({
         email: req.query.email
@@ -35,13 +32,13 @@ module.exports = function(app) {
         if (err) {
           console.log(err);
         } else if (res) {
-
+          console.log("Routes received a GET Request. Displaying Data - ", res);
           dbComment = res.comment;
           response.json(res);
 
         } else {
           response.json(null);
-          console.log("No Matches Found.");
+          console.log("Routes received a GET Request. No Matches Found.");
         }
       });
     }
@@ -73,7 +70,7 @@ module.exports = function(app) {
     var patches = dmp.patch_make(diff);
     var patched_text = dmp.patch_apply(patches, dbComment);
 
-    console.log("Patched Text: ", patched_text[0]);
+    console.log("Patched Comment: ", patched_text[0]);
 
     var newData = {
       'email': req.body.email,
