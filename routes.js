@@ -49,7 +49,7 @@ module.exports = function(app) {
 
   app.post('/api/comment', function(req, res) {
     console.log("Routes received a POST Request. Pushing Data: ", req.body);
-    delete req.body.diff;
+    dbComment = req.body.comment;
     collection.insert(req.body, function(err, doc) {
       if (err) {
         console.log(err);

@@ -21,7 +21,7 @@ Each time you sync the comment with server, make sure you submit just the delta/
 2. `cd HashnodeTask`
 3. `npm install`
 4. `bower install`
-5. `npm start`
+5. `npm start` or `nodemon`
 6. Go to `http://localhost:8000`
 
 

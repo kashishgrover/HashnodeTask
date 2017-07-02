@@ -62,13 +62,14 @@ angular.module('NerdCtrl', []).controller('NerdController', function($scope, $ht
     newComment = $scope.comment;
 
     //Send DIFF from over here to the Server
-    // console.log("Old Comment: ", oldComment);
-    // console.log("New Comment: ", newComment);
+    console.log("Old Comment: ", oldComment);
+    console.log("New Comment: ", newComment);
 
     $scope.left = oldComment;
     $scope.right = newComment;
 
-    var diff_main = dmp.diff_main(oldComment, newComment)
+    var diff_main = dmp.diff_main(oldComment, newComment);
+    console.log("Difference: ", diff_main)
 
     if (PostFlag === true) {
 
