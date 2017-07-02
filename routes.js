@@ -7,9 +7,7 @@ var url = 'mongodb://hashnodetask:hashnode@ds133932.mlab.com:33932/meinl';
 var MongoClient = mongoose.mongo.MongoClient;
 var conn, collection;
 
-var oldComment = "";
-var newComment = "";
-var diff_main = [];
+var dbComment = "";
 
 MongoClient.connect(url, function(err, db) {
   if (err) {
@@ -20,6 +18,8 @@ MongoClient.connect(url, function(err, db) {
     collection = conn.collection('comment');
   }
 });
+
+console.log(dmp.diff_main('a', 'b'));
 
 module.exports = function(app) {
 
@@ -35,17 +35,10 @@ module.exports = function(app) {
         if (err) {
           console.log(err);
         } else if (res) {
-          data = res;
 
-          oldComment = res.comment;
+          dbComment = res.comment;
+          response.json(res);
 
-          if (data.diff !== null) {
-            var patches = dmp.patch_make(data.diff);
-            var patched_text = dmp.patch_apply(patches, oldComment);
-            data.comment = patched_text[0];
-          }
-
-          response.json(data);
         } else {
           response.json(null);
           console.log("No Matches Found.");
@@ -55,8 +48,8 @@ module.exports = function(app) {
   });
 
   app.post('/api/comment', function(req, res) {
-    console.log("Routes received a POST Request. Pushing Data.");
-    req.body.diff = null;
+    console.log("Routes received a POST Request. Pushing Data: ", req.body);
+    delete req.body.diff;
     collection.insert(req.body, function(err, doc) {
       if (err) {
         console.log(err);
@@ -68,17 +61,25 @@ module.exports = function(app) {
   app.put('/api/comment/:id', function(req, res) {
 
     var query = {
-      'email': req.body.email
+      'email': req.body.email,
     };
 
-    newComment = req.body.comment;
-    diff_main = dmp.diff_main(oldComment, newComment);
+    diff = req.body.diff;
+    console.log("Comment in DB: ", dbComment);
+    console.log("Difference: ", diff);
+
+    var patches = dmp.patch_make(diff);
+    var patched_text = dmp.patch_apply(patches, dbComment);
+
+    console.log("Patched Text: ", patched_text[0]);
 
     var newData = {
       'email': req.body.email,
-      'comment': oldComment,
-      'diff': diff_main
+      'comment': patched_text[0]
     }
+
+    console.log("Data PUT: ", newData);
+    dbComment = patched_text[0];
 
     collection.findOneAndUpdate(query, newData, {
       upsert: true
@@ -86,8 +87,7 @@ module.exports = function(app) {
       if (err) {
         console.log("Error Updating")
       }
-
-      oldComment = newComment;
+      console.log("Doc:", doc);
 
       return res.send("Succesfully saved");
     });

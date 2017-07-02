@@ -6,6 +6,7 @@
         "font-awesome": "latest",
         "animate.css": "latest",
         "angular": "~1.5.0",
-        "angular-route": "~1.5.0"
+        "angular-route": "~1.5.0",
+        "google-diff-match-patch": "~0.1.0"
     }
 }

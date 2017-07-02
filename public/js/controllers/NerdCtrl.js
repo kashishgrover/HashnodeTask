@@ -1,4 +1,6 @@
-angular.module('NerdCtrl', []).controller('NerdController', function($scope, $http) {
+angular.module('NerdCtrl', []).controller('NerdController', function($scope, $http, $window) {
+
+  var dmp = new $window.diff_match_patch;
 
   var id = "";
 
@@ -7,6 +9,9 @@ angular.module('NerdCtrl', []).controller('NerdController', function($scope, $ht
   $scope.NewUser = false;
 
   $scope.syncingText = "Not Syncing..."
+
+  var oldComment = "";
+  var newComment = "";
 
   $scope.Login = function() {
     var data = {
@@ -24,17 +29,23 @@ angular.module('NerdCtrl', []).controller('NerdController', function($scope, $ht
 
       if (response.data !== null) {
         console.log("GET successful. Data found.");
+
         $scope.comment = response.data.comment;
+        oldComment = response.data.comment;
         id = response.data._id;
+
         $scope.syncingText = "Not Syncing...";
+
+        PostFlag = false;
         $scope.NewUser = false;
         $scope.LoggedIn = true;
-        PostFlag = false;
 
       } else {
         console.log("GET successful, but no data found.");
-        PostFlag = true;
+
         $scope.syncingText = "This user does not exist.";
+
+        PostFlag = true;
         $scope.NewUser = true;
 
       }
@@ -48,26 +59,48 @@ angular.module('NerdCtrl', []).controller('NerdController', function($scope, $ht
   $scope.inputChanged = function() {
     $scope.syncingText = "Syncing...";
 
-    var data = {
-      email: $scope.email,
-      comment: $scope.comment
-    };
+    newComment = $scope.comment;
+
+    //Send DIFF from over here to the Server
+    // console.log("Old Comment: ", oldComment);
+    // console.log("New Comment: ", newComment);
+
+    $scope.left = oldComment;
+    $scope.right = newComment;
+
+    var diff_main = dmp.diff_main(oldComment, newComment)
 
     if (PostFlag === true) {
-      $http.post('/api/comment', data).success(function(data, status) {
+
+      var data = {
+        email: $scope.email,
+        comment: $scope.comment
+      };
+
+      console.log("Data will be POSTed.");
+      $http.post('/api/comment/', data).success(function(data, status) {
 
         console.log("POST successful. Comment Synced. User Registered.");
         PostFlag = false;
 
         $scope.LoggedIn = true;
         $scope.syncingText = "Not Syncing...";
+
         id = data.ops[0]._id;
+        oldComment = data.ops[0].comment;
 
       });
     } else {
-      console.log("Data will have to be PUT");
-      $http.put('/api/comment/' + id, data).success(function(data, status) {
 
+      var data = {
+        email: $scope.email,
+        diff: diff_main
+      };
+
+      console.log("Data will have to be PUT");
+      $http.put('/api/comment/' + id, data).success(function(status) {
+
+        oldComment = newComment;
         console.log("PUT successful. Comment Synced.");
 
         $scope.syncingText = "Not Syncing...";
