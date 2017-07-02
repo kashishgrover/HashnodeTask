@@ -47,6 +47,7 @@ module.exports = function(app) {
 
           response.json(data);
         } else {
+          response.json(null);
           console.log("No Matches Found.");
         }
       });
